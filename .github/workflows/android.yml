@@ -1,0 +1,53 @@
+name: Android CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Create local.properties
+        run: |
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> local.properties
+          echo "KEY=${{ secrets.API_KEY }}" >> local.properties
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Run Tests and Generate Test Coverage Report
+        run: ./gradlew :domain:test :data:test :presentation:test
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/
+            **/build/reports/jacoco/
+
+      - name: Upload Build Reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-reports
+          path: |
+            **/build/reports/
+            **/build/outputs/logs/
