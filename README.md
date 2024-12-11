@@ -1,4 +1,4 @@
-[![Android CI](https://github.com/{dzakdzaks}/{WeatherApp}/actions/workflows/android.yml/badge.svg)](https://github.com/{dzakdzaks}/{WeatherApp}/actions/workflows/android.yml)
+[![Android CI](https://github.com/dzakdzaks/WeatherApp/actions/workflows/android.yml/badge.svg)](https://github.com/dzakdzaks/WeatherApp/actions/workflows/android.yml)
 
 # Weather App
 
